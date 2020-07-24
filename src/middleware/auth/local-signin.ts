@@ -2,7 +2,7 @@ import passport from "passport";
 import {Strategy as LocalStrategy} from "passport-local";
 import {Request} from "express";
 import md5 from "md5";
-import {User} from "../models/table/user.model";
+import {User} from "../../models/table/user.model";
 
 passport.use(
     "local-signIn",

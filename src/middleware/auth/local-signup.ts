@@ -1,9 +1,9 @@
 import passport from "passport";
-import {IVerifyOptions, Strategy as LocalStrategy} from "passport-local"; // passport-local 전략
+import {IVerifyOptions, Strategy as LocalStrategy} from "passport-local"; // auth-local 전략
 import { Request } from "express";
 import md5 from "md5";
-import {User} from "../models/table/user.model";
-import {userService} from "../service/user.service";
+import {User} from "../../models/table/user.model";
+import {userService} from "../../service/user.service";
 
 passport.use(
     "local-signUp", // 각 전략마다 이름을 지어줄 수 있습니다. 만약 생략한다면 local이라는 이름을 사용하게 됩니다.

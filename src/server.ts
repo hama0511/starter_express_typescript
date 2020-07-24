@@ -4,8 +4,8 @@ import main from "./main";
 import {sequelize} from "./models/DB";
 import "source-map-support/register";
 import passport from "passport";
-import "./passport/local-signup";
-import "./passport/local-signin";
+import "./middleware/auth/local-signup";
+import "./middleware/auth/local-signin";
 
 main.use(passport.initialize());
 /**

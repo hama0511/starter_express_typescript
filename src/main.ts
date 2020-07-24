@@ -9,6 +9,7 @@ import * as userController from "./controllers/user.controller";
 import errorMiddleware from "./middleware/error.middleware";
 import {NextFunction} from "express";
 import {Request, Response} from "express";
+import {checkAuth} from "./middleware/auth/validate.auth";
 
 // Create Express server
 const main = express();
@@ -36,7 +37,9 @@ function _(fn: Function) {
  * routes.
  */
 main.post("/user/sign-up", _(userController.signUp));
-main.post("/user/sign-in", _(userController.signIn));
+main.post("/user/get-token", _(userController.getToken));
+main.post("/user/refresh-token", _(userController.tokenRefresh));
+main.get("/user", checkAuth, _(userController.getUser));
 
 /**
  * error handler.

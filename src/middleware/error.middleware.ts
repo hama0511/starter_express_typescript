@@ -9,6 +9,8 @@ function errorMiddleware(error: HttpException, request: Request, response: Respo
     logger.error(message);
     console.log(error.stack);
 
+    //TODO log url / data
+
     response
         .status(status)
         .send({

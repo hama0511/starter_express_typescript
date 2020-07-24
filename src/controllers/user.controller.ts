@@ -2,7 +2,8 @@
 
 import {Response, Request, NextFunction} from "express";
 import passport from "passport";
-import {jwtToken} from "../util/JWToken";
+import {paramUtil} from "../util/param";
+import {jwtToken} from "../util/jwt-token";
 
 /*
 @route
@@ -19,7 +20,10 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
         if (userId) {
             return res.send({
                 success: true,
-                token: await jwtToken.generateToken(userId)
+                data: {
+                    accessToken: await jwtToken.generateAccessToken(userId),
+                    refreshToken: await jwtToken.generateRefreshToken(userId)
+                }
             });
         }
 
@@ -34,16 +38,22 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
     })(req, res, next);
 };
 
-export const signIn = async (req: Request, res: Response, next: NextFunction) => {
-    passport.authenticate("local-signIn", {session: false}, async (err, email, info) => {
+/*
+
+ */
+export const getToken = async (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate("local-signIn", {session: false}, async (err, userId, info) => {
         if (err) {
             return next(err);
         }
 
-        if (email) {
+        if (userId) {
             return res.send({
                 success: true,
-                token: await jwtToken.generateToken(email)
+                data: {
+                    accessToken: await jwtToken.generateAccessToken(userId),
+                    refreshToken: await jwtToken.generateRefreshToken(userId)
+                }
             });
         }
 
@@ -54,3 +64,60 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
     })(req, res, next);
 };
 
+/*
+ req.data = JSON ({
+ ..refreshToken: string
+ })
+ res.data : {
+ ..accessToken: string
+ ..refreshToken: string
+ }
+*/
+export const tokenRefresh = async (req: Request, res: Response, next: NextFunction) => {
+    const refreshToken = req.body.refreshToken;
+    if (!paramUtil.checkParam(refreshToken)) {
+        return res.status(400).send({
+            success: false,
+            message: "잘못된 요청입니다."
+        });
+    }
+
+    const userId = jwtToken.decodeRefreshToken(refreshToken);
+    if (!userId) {
+        return res.status(403).send({
+            success: false,
+            message: "권한이 없습니다."
+        });
+    }
+
+    return res.send({
+        success: true,
+        data: {
+            accessToken: await jwtToken.generateAccessToken(userId),
+            refreshToken: await jwtToken.generateRefreshToken(userId)
+        }
+    });
+};
+
+/*
+ req.data = JSON ({
+ })
+ res.data : {
+ }
+*/
+export const getUser = async (req: Request, res: Response, next: NextFunction) => {
+    if (!paramUtil.checkParam([req.body.user22444])) {
+        return res.status(400).send({
+            success: false,
+            message: "잘못된 요청입니다."
+        });
+    }
+
+    const userKey = req.user;
+    return res.send({
+        success: true,
+        data: {
+            userKey: userKey
+        }
+    });
+};
