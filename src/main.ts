@@ -5,7 +5,7 @@ import lusca from "lusca";
 import path from "path";
 
 // Controllers (route handlers)
-import * as personController from "./controllers/person";
+import * as userController from "./controllers/user.controller";
 import errorMiddleware from "./middleware/error.middleware";
 import {NextFunction} from "express";
 import {Request, Response} from "express";
@@ -35,9 +35,8 @@ function _(fn: Function) {
 /**
  * routes.
  */
-main.post("/person", _(personController.createPerson));
-
-//TODO login
+main.post("/user/sign-up", _(userController.signUp));
+main.post("/user/sign-in", _(userController.signIn));
 
 /**
  * error handler.

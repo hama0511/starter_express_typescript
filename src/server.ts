@@ -3,7 +3,11 @@ import errorHandler from "errorhandler";
 import main from "./main";
 import {sequelize} from "./models/DB";
 import "source-map-support/register";
+import passport from "passport";
+import "./passport/local-signup";
+import "./passport/local-signin";
 
+main.use(passport.initialize());
 /**
  * Error Handler. Provides full stack - remove for production
  */
@@ -15,5 +19,5 @@ main.use(errorHandler());
 (async () => {
     await main.listen(main.get("port"));
 
-    await sequelize.sync({force: false});
+    await sequelize.sync({force: true});
 })();

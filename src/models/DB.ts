@@ -1,5 +1,5 @@
 import {Sequelize} from "sequelize-typescript";
-import {Person} from "./table/person.model";
+import {User} from "./table/user.model";
 import logger from "../util/logger";
 import {DB_URL, USERNAME, PASSWORD} from "../util/secrets";
 
@@ -13,6 +13,6 @@ export const sequelize =  new Sequelize({
     dialect: "mysql",
     username: USERNAME,
     password: PASSWORD,
-    models: [Person]
+    models: [User]
 });
 
